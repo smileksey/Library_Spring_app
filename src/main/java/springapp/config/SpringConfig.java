@@ -64,8 +64,6 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setContentType("text/html; charset=UTF-8");
     }
 
-    //Бин с конфигурацией текущей БД для JDBC Template
-    //По-правильному все эти значения надо выносить в отдельный внешний файл
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -78,8 +76,6 @@ public class SpringConfig implements WebMvcConfigurer {
         return dataSource;
     }
 
-    //Бин для самого JDBC Template
-    //В его конструктор передаем бин dataSource
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
