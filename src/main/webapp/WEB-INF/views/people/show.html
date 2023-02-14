@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Человек</title>
+</head>
+<body>
+<p th:text="${person.getId()}">VALUE</p>
+<p th:text="${person.getName()}">VALUE</p>
+<p th:text="${person.getEmail()}">VALUE</p>
+<!--Переход на страницу редактирования данного человека-->
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
+
+<!--Создаем форму в виде одной кнопки для удаления человека из базы (она будет отправлять Delete-запрос)-->
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+
+</body>
+</html>
