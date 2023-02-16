@@ -16,6 +16,7 @@ public class BookMapper implements RowMapper<Book> {
         book.setTitle(resultSet.getString("title"));
         book.setAuthor(resultSet.getString("author"));
         book.setYear(resultSet.getInt("year"));
+        book.setPersonId(resultSet.getInt("person_id"));
 
         return book;
     }

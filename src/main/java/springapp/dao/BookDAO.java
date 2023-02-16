@@ -45,5 +45,13 @@ public class BookDAO {
         return jdbcTemplate.query("SELECT * FROM Book WHERE person_id=?", new Object[]{id}, new BookMapper());
     }
 
+    public void release(int id) {
+        jdbcTemplate.update("UPDATE Book SET person_id=null WHERE id=?", id);
+    }
+
+    public void borrow(int bookId, int personId) {
+        jdbcTemplate.update("UPDATE Book SET person_id=? WHERE id=?", personId, bookId);
+    }
+
 
 }

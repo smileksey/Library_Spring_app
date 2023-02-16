@@ -5,17 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import springapp.dao.BookDAO;
+import springapp.dao.PersonDAO;
 import springapp.models.Book;
+import springapp.models.Person;
 
 @Controller
 @RequestMapping("/books")
 public class BooksController {
 
     private final BookDAO bookDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
-    public BooksController(BookDAO bookDAO) {
+    public BooksController(BookDAO bookDAO, PersonDAO personDAO) {
         this.bookDAO = bookDAO;
+        this.personDAO = personDAO;
     }
 
     @GetMapping()
@@ -49,8 +53,10 @@ public class BooksController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@ModelAttribute("person") Person person, @PathVariable("id") int id, Model model) {
         model.addAttribute("book", bookDAO.show(id));
+        model.addAttribute("reader", personDAO.show(bookDAO.show(id).getPersonId()));
+        model.addAttribute("people", personDAO.index());
         return "books/show";
     }
 
@@ -58,5 +64,17 @@ public class BooksController {
     public String delete(@PathVariable("id") int id) {
         bookDAO.delete(id);
         return "redirect:/books";
+    }
+
+    @PatchMapping("/{id}/release")
+    public String release(@PathVariable("id") int id) {
+        bookDAO.release(id);
+        return "redirect:/books/" + id;
+    }
+
+    @PatchMapping("/{id}/borrow")
+    public String borrow(@ModelAttribute("person") Person person, @PathVariable("id") int id) {
+        bookDAO.borrow(id, person.getId());
+        return "redirect:/books/" + id;
     }
 }

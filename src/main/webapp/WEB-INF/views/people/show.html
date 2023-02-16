@@ -8,24 +8,25 @@
 
 <p th:text="${person.getName() + ', ' + person.getYearOfBirth()}">VALUE</p>
 
+<a th:if="${not #lists.isEmpty(books)}">
+    <hr/>
+    Книги:
+
+    <div th:each="book : ${books}">
+        <a th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</a>
+    </div>
+</a>
+
+<a th:if="${#lists.isEmpty(books)}">Человек пока не взял ни одной книги</a>
+
 <hr/>
 
-<a>Книги:</a>
-
-<div th:each="book : ${books}">
-    <a th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</a>
-</div>
-
-<hr/>
-
-<!--Переход на страницу редактирования данного человека-->
 <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
     <input type="submit" value="Редактировать"/>
 </form>
 
 <br/>
 
-<!--Создаем форму в виде одной кнопки для удаления человека из базы (она будет отправлять Delete-запрос)-->
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
     <input type="submit" value="Удалить"/>
 </form>

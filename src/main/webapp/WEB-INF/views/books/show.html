@@ -8,6 +8,31 @@
 
 <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
 
+<a th:unless="${book.getPersonId() == 0}">
+
+    <p th:text="${'Эта книга сейчас у: ' + reader.getName()}">VALUE</p>
+
+    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+        <input type="submit" value="Освободить книгу"/>
+    </form>
+</a>
+
+<a th:if="${book.getPersonId() == 0}">
+
+    <p>Эта книга свободна. Кому назначить ее?</p>
+
+    <form th:method="PATCH" th:action="@{/books/{id}/borrow(id=${book.getId()})}">
+
+        <label for="person">Выберите человека: </label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}"></option>
+        </select>
+
+        <input type="submit" value="Назначить книгу"/>
+
+    </form>
+
+</a>
 
 <hr/>
 

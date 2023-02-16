@@ -10,6 +10,9 @@ public class Book {
 
     private int year;
 
+
+    private int personId;
+
     public Book() {
     }
 
@@ -50,5 +53,13 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public int getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 }
