@@ -27,13 +27,13 @@ public class PersonDAO {
     //new Object[]{id} - массив со значениями, которые подставляются вместо "?" в SQL-запрос
     //в JDBC Templ для формирования SQL запроса используется PreparedStatement
     public Person show(int id) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+        return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id}, new PersonMapper())
                 .stream().findAny().orElse(null);
     }
 
     //В аргументах сразу после запроса перечисляем (в виде varargs) значения, которые подставятся вместо "?"
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO Person VALUES (1, ?, ?)",
+        jdbcTemplate.update("INSERT INTO Person (name, year_of_birth) VALUES (?, ?)",
                                 person.getName(), person.getYearOfBirth());
     }
 

@@ -5,15 +5,29 @@
     <title>Человек</title>
 </head>
 <body>
-<p th:text="${person.getId()}">VALUE</p>
-<p th:text="${person.getName()}">VALUE</p>
-<p th:text="${person.getEmail()}">VALUE</p>
+
+<p th:text="${person.getName() + ', ' + person.getYearOfBirth()}">VALUE</p>
+
+<hr/>
+
+<a>Книги:</a>
+
+<div th:each="book : ${books}">
+    <a th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</a>
+</div>
+
+<hr/>
+
 <!--Переход на страницу редактирования данного человека-->
-<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Редактировать"/>
+</form>
+
+<br/>
 
 <!--Создаем форму в виде одной кнопки для удаления человека из базы (она будет отправлять Delete-запрос)-->
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
-    <input type="submit" value="Delete"/>
+    <input type="submit" value="Удалить"/>
 </form>
 
 </body>

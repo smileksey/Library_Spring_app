@@ -14,7 +14,9 @@
 <br/>
 <hr/>
 
-<a href="/people/new">Добавить человека</a>
+<form th:method="GET" th:action="@{/people/new}">
+    <input type="submit" value="Добавить человека"/>
+</form>
 
 </body>
 </html>

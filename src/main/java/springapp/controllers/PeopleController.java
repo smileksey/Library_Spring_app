@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import springapp.dao.BookDAO;
 import springapp.dao.PersonDAO;
 import springapp.models.Person;
 
@@ -15,12 +16,12 @@ import javax.validation.Valid;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
 
-    //Внедряем бин personDAO через конструктор
-    //@Autowired указывать необязательно, Spring внедрит бин и без этого
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
     }
 
     @GetMapping()
@@ -36,6 +37,7 @@ public class PeopleController {
     public String show(@PathVariable("id") int id, Model model) {
         //Получаем одного человека по id из DAO и передаем на отображение во view
         model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("books", bookDAO.personsBooks(id));
         return "people/show";
     }
 
@@ -58,7 +60,6 @@ public class PeopleController {
             return "people/new";
         }
         personDAO.save(person);
-        //после сохранения объекта в БД перенапр. пользователя на страницу /people
         return "redirect:/people";
     }
 
