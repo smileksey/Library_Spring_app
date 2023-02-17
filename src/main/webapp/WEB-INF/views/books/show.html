@@ -8,20 +8,20 @@
 
 <b><p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p></b>
 
-<a th:unless="${book.getPersonId() == 0}">
+<div th:unless="${book.getPersonId() == 0}">
 
     <p th:text="${'Эта книга сейчас у: ' + reader.getName()}">VALUE</p>
 
     <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
         <input type="submit" value="Освободить книгу"/>
     </form>
-</a>
+</div>
 
-<a th:if="${book.getPersonId() == 0}">
+<div th:if="${book.getPersonId() == 0}">
 
     <p>Эта книга свободна. Кому назначить ее?</p>
 
-    <form th:method="PATCH" th:action="@{/books/{id}/borrow(id=${book.getId()})}">
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
 
         <label for="person">Выберите человека: </label>
         <select th:object="${person}" th:field="*{id}" id="person">
@@ -32,7 +32,7 @@
 
     </form>
 
-</a>
+</div>
 
 <hr/>
 

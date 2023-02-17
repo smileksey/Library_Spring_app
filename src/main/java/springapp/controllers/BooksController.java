@@ -92,9 +92,9 @@ public class BooksController {
         return "redirect:/books/" + id;
     }
 
-    @PatchMapping("/{id}/borrow")
-    public String borrow(@ModelAttribute("person") Person person, @PathVariable("id") int id) {
-        bookDAO.borrow(id, person.getId());
+    @PatchMapping("/{id}/assign")
+    public String assign(@ModelAttribute("person") Person person, @PathVariable("id") int id) {
+        bookDAO.assign(id, person.getId());
         return "redirect:/books/" + id;
     }
 }
