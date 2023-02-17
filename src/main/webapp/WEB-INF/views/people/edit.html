@@ -22,5 +22,12 @@
 
 </form>
 
+<br/>
+<hr/>
+
+<form th:method="GET" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Отмена"/>
+</form>
+
 </body>
 </html>

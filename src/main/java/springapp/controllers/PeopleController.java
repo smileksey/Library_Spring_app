@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import springapp.dao.BookDAO;
 import springapp.dao.PersonDAO;
 import springapp.models.Person;
+import springapp.util.PersonValidator;
 
 import javax.validation.Valid;
 
@@ -17,11 +18,13 @@ public class PeopleController {
 
     private final PersonDAO personDAO;
     private final BookDAO bookDAO;
+    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, BookDAO bookDAO) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
         this.bookDAO = bookDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -55,7 +58,9 @@ public class PeopleController {
     //bindingResult - объект, хранящий ошибки валидации
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
-        //Если при валидации были ошибки, заново возвращаем форму создания нового объекта
+
+        personValidator.validate(person, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
@@ -72,6 +77,8 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
                          @PathVariable("id") int id) {
+
+
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }

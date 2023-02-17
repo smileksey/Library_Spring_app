@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import springapp.models.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
@@ -29,6 +30,12 @@ public class PersonDAO {
     public Person show(int id) {
         return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id}, new PersonMapper())
                 .stream().findAny().orElse(null);
+    }
+
+    public Optional<Person> show(String name, int yearOfBirth) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE name=? AND year_of_birth=?",
+                                    new Object[]{name, yearOfBirth}, new PersonMapper())
+                .stream().findAny();
     }
 
     //В аргументах сразу после запроса перечисляем (в виде varargs) значения, которые подставятся вместо "?"

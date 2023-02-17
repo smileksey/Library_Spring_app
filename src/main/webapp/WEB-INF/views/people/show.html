@@ -6,11 +6,11 @@
 </head>
 <body>
 
-<p th:text="${person.getName() + ', ' + person.getYearOfBirth()}">VALUE</p>
+<b><p th:text="${person.getName() + ', ' + person.getYearOfBirth()}">VALUE</p></b>
 
 <a th:if="${not #lists.isEmpty(books)}">
     <hr/>
-    Книги:
+    <b>Книги:</b>
 
     <div th:each="book : ${books}">
         <a th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</a>
@@ -29,6 +29,13 @@
 
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
     <input type="submit" value="Удалить"/>
+</form>
+
+<hr/>
+<br/>
+
+<form th:method="GET" th:action="@{/people}">
+    <input type="submit" value="Назад"/>
 </form>
 
 </body>

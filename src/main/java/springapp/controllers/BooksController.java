@@ -3,11 +3,15 @@ package springapp.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springapp.dao.BookDAO;
 import springapp.dao.PersonDAO;
 import springapp.models.Book;
 import springapp.models.Person;
+import springapp.util.BookValidator;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/books")
@@ -15,11 +19,13 @@ public class BooksController {
 
     private final BookDAO bookDAO;
     private final PersonDAO personDAO;
+    private final BookValidator bookValidator;
 
     @Autowired
-    public BooksController(BookDAO bookDAO, PersonDAO personDAO) {
+    public BooksController(BookDAO bookDAO, PersonDAO personDAO, BookValidator bookValidator) {
         this.bookDAO = bookDAO;
         this.personDAO = personDAO;
+        this.bookValidator = bookValidator;
     }
 
     @GetMapping()
@@ -35,7 +41,14 @@ public class BooksController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("book") Book book) {
+    public String create(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult) {
+
+        bookValidator.validate(book, bindingResult);
+
+        if(bindingResult.hasErrors()) {
+            return "books/new";
+        }
+
         bookDAO.save(book);
         return "redirect:/books";
     }
@@ -47,7 +60,14 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("book") Book book, @PathVariable("id") int id) {
+    public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult,
+                         @PathVariable("id") int id) {
+
+
+        if(bindingResult.hasErrors()) {
+            return "books/edit";
+        }
+
         bookDAO.update(id, book);
         return "redirect:/books";
     }

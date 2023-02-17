@@ -27,5 +27,12 @@
 
 </form>
 
+<br/>
+<hr/>
+
+<form th:method="GET" th:action="@{/books/{id}(id=${book.getId()})}">
+  <input type="submit" value="Отмена"/>
+</form>
+
 </body>
 </html>

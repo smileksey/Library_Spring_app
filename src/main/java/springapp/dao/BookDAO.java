@@ -32,6 +32,11 @@ public class BookDAO {
                 .stream().findAny().orElse(null);
     }
 
+    public Optional<Book> show(String title) {
+        return jdbcTemplate.query("SELECT * FROM Book WHERE title=?", new Object[]{title}, new BookMapper())
+                .stream().findAny();
+    }
+
     public void update(int id, Book updatedBook) {
         jdbcTemplate.update("UPDATE Book SET title=?, author=?, year=? WHERE id=?",
                                 updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYear(), id);

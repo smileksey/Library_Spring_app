@@ -1,16 +1,17 @@
 package springapp.models;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Book {
-
     private int id;
-
+    @NotNull(message = "Это поле не может быть пустым")
+    @Size(min = 2, max = 50, message = "Имя должно состоять миниму из 2 и максимум из 50 символов")
     private String title;
-
+    @NotNull(message = "Это поле не может быть пустым")
+    @Size(min = 2, max = 50, message = "Имя автора должно состоять миниму из 2 и максимум из 50 символов")
     private String author;
-
     private int year;
-
-
     private int personId;
 
     public Book() {

@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
+<b><p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p></b>
 
 <a th:unless="${book.getPersonId() == 0}">
 
@@ -44,6 +44,13 @@
 
 <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
     <input type="submit" value="Удалить"/>
+</form>
+
+<hr/>
+<br/>
+
+<form th:method="GET" th:action="@{/books}">
+    <input type="submit" value="Назад"/>
 </form>
 
 </body>
