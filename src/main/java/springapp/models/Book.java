@@ -1,24 +1,35 @@
 package springapp.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "Book")
 public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
     @NotNull(message = "Это поле не может быть пустым")
     @Size(min = 2, max = 50, message = "Имя должно состоять миниму из 2 и максимум из 50 символов")
+    @Column(name = "title")
     private String title;
     @NotNull(message = "Это поле не может быть пустым")
     @Size(min = 2, max = 50, message = "Имя автора должно состоять миниму из 2 и максимум из 50 символов")
+    @Column(name = "author")
     private String author;
+    @Column(name = "year")
     private int year;
-    private int personId;
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person owner;
 
     public Book() {
     }
 
-    public Book(int id, String title, String author, int year) {
-        this.id = id;
+    public Book(String title, String author, int year) {
         this.title = title;
         this.author = author;
         this.year = year;
@@ -56,11 +67,11 @@ public class Book {
         this.year = year;
     }
 
-    public int getPersonId() {
-        return personId;
+    public Person getOwner() {
+        return owner;
     }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 }

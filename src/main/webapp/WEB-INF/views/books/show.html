@@ -8,7 +8,7 @@
 
 <b><p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p></b>
 
-<div th:unless="${book.getPersonId() == 0}">
+<div th:unless="${book.getOwner() == null}">
 
     <p th:text="${'Эта книга сейчас у: ' + reader.getName()}">VALUE</p>
 
@@ -17,7 +17,7 @@
     </form>
 </div>
 
-<div th:if="${book.getPersonId() == 0}">
+<div th:if="${book.getOwner() == null}">
 
     <p>Эта книга свободна. Кому назначить ее?</p>
 

@@ -1,13 +1,15 @@
 package springapp.controllers;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springapp.dao.BookDAO;
-import springapp.dao.PersonDAO;
 import springapp.models.Person;
+import springapp.services.BooksService;
+import springapp.services.PeopleService;
 import springapp.util.PersonValidator;
 
 import javax.validation.Valid;
@@ -16,21 +18,21 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
+    private final PeopleService peopleService;
+    private final BooksService booksService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidator personValidator) {
-        this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
+    public PeopleController(PeopleService peopleService, BooksService booksService, PersonValidator personValidator) {
+        this.peopleService = peopleService;
+        this.booksService = booksService;
         this.personValidator = personValidator;
     }
 
     @GetMapping()
     public String index(Model model) {
-        //Получаем всех людей из DAO и отправляем на отображение во view
-        model.addAttribute("people", personDAO.index());
+        //Получаем всех людей из БД и отправляем на отображение во view
+        model.addAttribute("people", peopleService.findAll());
         return "people/index";
     }
 
@@ -38,18 +40,16 @@ public class PeopleController {
     //с помощью аннотации @PathVariable мы вытаскиваем этот параметр и присваеваем его переменной int id
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        //Получаем одного человека по id из DAO и передаем на отображение во view
-        model.addAttribute("person", personDAO.show(id));
-        model.addAttribute("books", bookDAO.personsBooks(id));
+        //Получаем одного человека по id из БД и передаем на отображение во view
+        Person person = peopleService.findOne(id);
+        model.addAttribute("person", person);
+        model.addAttribute("books", person.getBooks());
         return "people/show";
     }
 
-    //Данный метод также можно реализовать с @ModelAttribute в аргументах,
-    //не нужно будет вручную добавлять атрибут в модель через model.addAttribute
+    //нужно создать атрибут с нужным объектом, чтобы указать его в форме Thymeleaf (th:object="${person}")
     @GetMapping("/new")
-    public String newPerson(Model model) {
-        //нужно создать атрибут с нужным объектом, чтобы указать его в форме Thymeleaf (th:object="${person}")
-        model.addAttribute("person", new Person());
+    public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
     }
 
@@ -64,13 +64,13 @@ public class PeopleController {
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
-        personDAO.save(person);
+        peopleService.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("person", peopleService.findOne(id));
         return "people/edit";
     }
 
@@ -78,18 +78,17 @@ public class PeopleController {
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
                          @PathVariable("id") int id) {
 
-
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
 
-        personDAO.update(id, person);
+        peopleService.update(id, person);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        personDAO.delete(id);
+        peopleService.delete(id);
         return "redirect:/people";
     }
 
