@@ -1,6 +1,7 @@
 package springapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,8 +30,13 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(@RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer itemsPerPage,
+                        @RequestParam(value = "sort_by_year", required = false) boolean sortByYear,
+                        Model model) {
+
+        model.addAttribute("books", booksService.findAll(page, itemsPerPage, sortByYear));
+
         return "books/index";
     }
 

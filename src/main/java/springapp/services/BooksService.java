@@ -2,6 +2,8 @@ package springapp.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springapp.models.Book;
@@ -22,8 +24,21 @@ public class BooksService {
         this.booksRepository = booksRepository;
     }
 
-    public List<Book> findAll() {
-        return booksRepository.findAll();
+
+    public List<Book> findAll(Integer page, Integer itemsPerPage, boolean sortByYear) {
+        if (page != null && itemsPerPage != null) {
+            if (sortByYear) {
+                return booksRepository.findAll(PageRequest.of(page, itemsPerPage, Sort.by("year"))).getContent();
+            } else {
+                return booksRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+            }
+        } else {
+            if (sortByYear) {
+                return booksRepository.findAll(Sort.by("year"));
+            } else {
+                return booksRepository.findAll();
+            }
+        }
     }
 
     public Book findOne(int id) {
