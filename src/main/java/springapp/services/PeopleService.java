@@ -4,11 +4,14 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springapp.models.Book;
 import springapp.models.Person;
 import springapp.repositories.PeopleRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,9 +31,24 @@ public class PeopleService {
     public Person findOne(int id) {
         Optional<Person> foundPerson = peopleRepository.findById(id);
 
+
         if (foundPerson.isPresent()) {
             Person person = foundPerson.get();
             Hibernate.initialize(person.getBooks());
+
+            Date currentDate = new Date();
+
+            for(Book b : person.getBooks()) {
+                if (b.getDateOfBorrowing() != null) {
+
+                    long diffInMillis = Math.abs(currentDate.getTime() - b.getDateOfBorrowing().getTime());
+                    long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+                    if (diffInDays > 10)
+                        b.setExpired(true);
+                }
+            }
+
             return person;
         }
         return null;

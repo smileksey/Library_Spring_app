@@ -10,6 +10,7 @@ import springapp.models.Book;
 import springapp.models.Person;
 import springapp.repositories.BooksRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,12 +69,16 @@ public class BooksService {
 
     @Transactional
     public void release(int id) {
-        findOne(id).setOwner(null);
+        Book book = findOne(id);
+        book.setOwner(null);
+        book.setDateOfBorrowing(null);
     }
 
     @Transactional
     public void assign(int bookId, Person person) {
-        findOne(bookId).setOwner(person);
+        Book book = findOne(bookId);
+        book.setOwner(person);
+        book.setDateOfBorrowing(new Date());
     }
 
     public Book findStartingWith(String titleStartingWith) {

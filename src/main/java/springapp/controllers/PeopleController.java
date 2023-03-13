@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springapp.dao.BookDAO;
+import springapp.models.Book;
 import springapp.models.Person;
 import springapp.services.BooksService;
 import springapp.services.PeopleService;
@@ -44,6 +45,7 @@ public class PeopleController {
         Person person = peopleService.findOne(id);
         model.addAttribute("person", person);
         model.addAttribute("books", person.getBooks());
+
         return "people/show";
     }
 

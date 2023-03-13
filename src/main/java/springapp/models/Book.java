@@ -1,8 +1,11 @@
 package springapp.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @Table(name = "Book")
@@ -25,6 +28,13 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
+
+    @Column(name = "date_of_borrowing")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBorrowing;
+
+    @Transient
+    private boolean isExpired;
 
     public Book() {
     }
@@ -73,5 +83,21 @@ public class Book {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public Date getDateOfBorrowing() {
+        return dateOfBorrowing;
+    }
+
+    public void setDateOfBorrowing(Date dateOfBorrowing) {
+        this.dateOfBorrowing = dateOfBorrowing;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
     }
 }
