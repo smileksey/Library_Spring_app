@@ -103,4 +103,21 @@ public class BooksController {
         booksService.assign(id, person);
         return "redirect:/books/" + id;
     }
+
+    @GetMapping("/search")
+    public String search() {
+        return "books/search";
+    }
+
+    @GetMapping("/find")
+    public String find(@RequestParam String titleStartingWith, Model model) {
+
+        Book book = booksService.findStartingWith(titleStartingWith);
+
+        if (book != null) {
+            model.addAttribute("book", book);
+        }
+
+        return "books/search_result";
+    }
 }

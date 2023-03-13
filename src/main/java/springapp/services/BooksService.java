@@ -76,5 +76,9 @@ public class BooksService {
         findOne(bookId).setOwner(person);
     }
 
+    public Book findStartingWith(String titleStartingWith) {
+        return booksRepository.findBookByTitleStartingWith(titleStartingWith).orElse(null);
+    }
+
 
 }

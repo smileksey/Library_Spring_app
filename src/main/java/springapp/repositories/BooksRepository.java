@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
 
     Optional<Book> findBookByTitle(String title);
+
+    Optional<Book> findBookByTitleStartingWith(String startingWith);
 }
