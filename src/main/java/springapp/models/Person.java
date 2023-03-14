@@ -1,7 +1,5 @@
 package springapp.models;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
